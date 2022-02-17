@@ -13,7 +13,7 @@ namespace SQLite
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class MainActivity : Activity
     {
-        EditText titleEditText, authorEditText;
+        EditText titleText, authorText;
         Button saveButton, show;
         TextView Datashow;
 
@@ -21,8 +21,8 @@ namespace SQLite
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.main);
-            titleEditText = FindViewById<EditText>(Resource.Id.titleEditText);
-            authorEditText = FindViewById<EditText>(Resource.Id.authorEditText);
+            titleText = FindViewById<EditText>(Resource.Id.titleEditText);
+            authorText = FindViewById<EditText>(Resource.Id.authorEditText);
             saveButton = FindViewById<Button>(Resource.Id.saveButton);
             show = FindViewById<Button>(Resource.Id.showButton);
             Datashow = FindViewById<TextView>(Resource.Id.textView1);
@@ -31,12 +31,14 @@ namespace SQLite
             saveButton.Click += SaveButton_Click;
         }
 
-        private void Show_Click(object sender, EventArgs e)
+        public void Show_Click(object sender, EventArgs e)
         {
-
+            string data2 = authorText.Text;
+            string data = titleText.Text;
+            Datashow.Text = data + "\n" + data2;
         }
 
-        private void SaveButton_Click(object sender, EventArgs args)
+        public void SaveButton_Click(object sender, EventArgs args)
         {
             string db_name = "books db. sqlite";
             string folderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
@@ -46,13 +48,17 @@ namespace SQLite
 
             Book newBook = new Book()
             {
-                Author = authorEditText.Text,
-                Name = titleEditText.Text
+                Author = authorText.Text,
+                Name = titleText.Text
 
             };
 
             if (Databasetelper.Insert(ref newBook, db_path))
+            {
                 Console.WriteLine("SUCCESS");
+                Console.WriteLine(titleText.Text);
+                Console.WriteLine(authorText.Text);
+            }
             else
                 Console.WriteLine("FAILURE");
         }
